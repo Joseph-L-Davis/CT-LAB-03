@@ -11,7 +11,7 @@ describe('car routes', () => {
   it('POST to create a car', async () => {
     const res = await request(app)
       .post('/api/v1/cars')
-      .send(({ make: 'Toyota', model: 'Prius', year: 2011 }));
+      .send({ make: 'Toyota', model: 'Prius', year: 2011 });
     
     expect(res.body).toEqual({
       id: '1',
