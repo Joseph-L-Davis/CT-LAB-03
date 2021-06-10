@@ -1,0 +1,15 @@
+DROP TABLE IF EXISTS orders CASCASDE;
+DROP TABLE IF EXISTS cars;
+
+
+CREATE TABLE orders (
+    id BIGINT PRIMARY KEY NOT NULL,
+    quantity_of_items BIGINT
+);
+
+CREATE TABLE cars (
+    id BIGINT PRIMARY KEY NOT NULL,
+    make VARCHAR(128) NOT NULL,
+    model VARCHAR(128) NOT NULL,
+    year VARCHAR(128) NOT NULL,
+);
