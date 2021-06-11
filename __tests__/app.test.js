@@ -36,4 +36,22 @@ describe('car routes', () => {
     console.log(car);
     expect(res.body).toEqual(car);
   });
+
+  it('GET ALL cars', async () => {
+    const prius = await Car.insert({
+      make: 'Toyota',
+      model: 'Prius',
+      year: 2011
+    });
+    
+    const malibu = await Car.insert({
+      make: 'Chevy',
+      model: 'Malibu',
+      year: 2019
+    });
+
+    const res = await request(app)
+      .get('/api/v1/cars');
+    expect(res.body).toEqual([prius, malibu]);
+  });
 });
