@@ -5,7 +5,6 @@ const request = require('supertest');
 const app = require('../lib/app');
 const Car = require('../lib/models/Car');
 const Headband = require('../lib/models/Headband');
-// const Car = require('../lib/models/Car');
 
 describe.skip('car routes', () => {
   beforeEach(() => {
@@ -90,12 +89,25 @@ describe('headband routes', () => {
     const res = await request(app)
       .post('/api/v1/headbands')
       .send({ color: 'red', size: 'large' });
-    console.log(res.body);
+
     expect(res.body).toEqual({
       id: '1',
       color: 'red',
       size: 'large'
     });
+  });
+
+  it('GET headband by ID', async () => {
+    const firstBand = await Headband.insert({
+      color: 'blue',
+      size: 'teeny weeny'
+    });
+    console.log(firstBand);
+
+    const res = await request(app)
+      .get(`/api/v1/headbands/${firstBand.id}`);
+
+    expect(res.body).toEqual(firstBand);
   });
 
 
