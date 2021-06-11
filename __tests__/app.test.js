@@ -6,12 +6,12 @@ const app = require('../lib/app');
 const Car = require('../lib/models/Car');
 // const Car = require('../lib/models/Car');
 
-describe('car routes', () => {
+describe.skip('car routes', () => {
   beforeEach(() => {
     return setup(pool);
   });
 
-  it.skip('POST to create a car', async () => {
+  it('POST to create a car', async () => {
     const res = await request(app)
       .post('/api/v1/cars')
       .send({ make: 'Toyota', model: 'Prius', year: 2011 });
@@ -24,7 +24,7 @@ describe('car routes', () => {
     });
   });
 
-  it.skip('GET car by ID', async () => {
+  it('GET car by ID', async () => {
     const car = await Car.insert({
       make: 'Ford',
       model: 'Focus',
@@ -37,7 +37,7 @@ describe('car routes', () => {
     expect(res.body).toEqual(car);
   });
 
-  it.skip('GET ALL cars', async () => {
+  it('GET ALL cars', async () => {
     const prius = await Car.insert({
       make: 'Toyota',
       model: 'Prius',
@@ -55,7 +55,7 @@ describe('car routes', () => {
     expect(res.body).toEqual([prius, malibu]);
   });
 
-  it.skip('UPDATE car by ID', async () => {
+  it('UPDATE car by ID', async () => {
     
     const res = await request(app)
       .post('/api/v1/cars')
