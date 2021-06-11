@@ -55,7 +55,7 @@ describe('car routes', () => {
     expect(res.body).toEqual([prius, malibu]);
   });
 
-  it('UPDATE car in DB', async () => {
+  it.skip('UPDATE car by ID', async () => {
     
     const res = await request(app)
       .post('/api/v1/cars')
@@ -66,5 +66,16 @@ describe('car routes', () => {
     const secondRes = await request(app)
       .get(`/api/v1/cars/${prius.id}`);
     expect(secondRes.body).toEqual(prius);
+  });
+
+  it('DELETE car by ID', async () => {
+    const prius = await request(app)
+      .post('/api/v1/cars')
+      .send({ make: 'Toyota', model: 'Prius', year: 2011 });
+
+    const res = await Car.deleteItem(prius.body.id);
+    request(app)
+      .delete(`/api/v1/cars/${prius.id}`);
+    expect(res.body).toEqual(prius.id);
   });
 });
