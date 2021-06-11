@@ -102,7 +102,6 @@ describe('headband routes', () => {
       color: 'blue',
       size: 'teeny weeny'
     });
-    console.log(firstBand);
 
     const res = await request(app)
       .get(`/api/v1/headbands/${firstBand.id}`);
@@ -110,5 +109,21 @@ describe('headband routes', () => {
     expect(res.body).toEqual(firstBand);
   });
 
+  it('GET all headbands', async () => {
+    const yellow = await Headband.insert({
+      color: 'yellow',
+      size: 'super large'
+    });
+
+    const pink = await Headband.insert({
+      color: 'pink',
+      size: 'way medium'
+    });
+
+    const res = await request(app)
+      .get('/api/v1/headbands');
+    
+    expect(res.body).toEqual([yellow, pink]);
+  });
 
 });
