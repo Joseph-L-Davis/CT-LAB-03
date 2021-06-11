@@ -4,6 +4,7 @@ const setup = require('../data/setup');
 const request = require('supertest');
 const app = require('../lib/app');
 const Car = require('../lib/models/Car');
+const Headband = require('../lib/models/Headband');
 // const Car = require('../lib/models/Car');
 
 describe.skip('car routes', () => {
@@ -78,4 +79,24 @@ describe.skip('car routes', () => {
       .delete(`/api/v1/cars/${prius.id}`);
     expect(res.body).toEqual(prius.id);
   });
+});
+
+describe('headband routes', () => {
+  beforeEach(() => {
+    return setup(pool);
+  });
+  
+  it('POST headband', async () => {
+    const res = await request(app)
+      .post('/api/v1/headbands')
+      .send({ color: 'red', size: 'large' });
+    console.log(res.body);
+    expect(res.body).toEqual({
+      id: '1',
+      color: 'red',
+      size: 'large'
+    });
+  });
+
+
 });
