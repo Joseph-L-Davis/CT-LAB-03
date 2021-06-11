@@ -126,4 +126,23 @@ describe('headband routes', () => {
     expect(res.body).toEqual([yellow, pink]);
   });
 
+  it('UPDATE headband', async () => {
+    const headband = await request(app)
+      .post('/api/v1/headbands')
+      .send({
+        color: 'cyan',
+        size: 'large'
+      });
+
+    const updatedHeadband = await Headband.updateItem(headband.body.id, {
+      color: 'cyan',
+      size: 'LARGER'
+    });
+
+    const res = await request(app)
+      .get(`/api/v1/headbands/${updatedHeadband.id}`);
+
+    expect(res.body).toEqual(updatedHeadband);
+  });
+
 });
