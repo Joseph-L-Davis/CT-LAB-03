@@ -3,6 +3,7 @@ const pool = require('../lib/utils/pool');
 const setup = require('../data/setup');
 const request = require('supertest');
 const app = require('../lib/app');
+const Car = require('../lib/models/Car');
 // const Car = require('../lib/models/Car');
 
 describe('car routes', () => {
@@ -24,6 +25,15 @@ describe('car routes', () => {
   });
 
   it('GET car by ID', async () => {
-    
+    const car = await Car.insert({
+      make: 'Ford',
+      model: 'Focus',
+      year: 1994
+    });
+
+    const res = await request(app)
+      .get(`/api/v1/cars/${car.id}`);
+    console.log(car);
+    expect(res.body).toEqual(car);
   });
 });
