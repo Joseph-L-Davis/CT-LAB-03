@@ -127,7 +127,7 @@ describe.skip('headband routes', () => {
     expect(res.body).toEqual([yellow, pink]);
   });
 
-  it('UPDATE headband', async () => {
+  it('PUT headband', async () => {
     const headband = await request(app)
       .post('/api/v1/headbands')
       .send({
@@ -215,5 +215,27 @@ describe('spirit routes', () => {
       .get('/api/v1/spirits');
 
     expect(res.body).toEqual([beefeater, losJavis]);
+  });
+
+  it('PUT spirit', async () => {
+    const conejos = await request(app)
+      .post('/api/v1/spirits')
+      .send({
+        name: '400 Conejos',
+        region: 'Mexico',
+        abv: 42
+      });
+
+    const updatedConejos = await Spirit.updateItem(conejos.body.id, {
+      name: '400 Conejos',
+      region: 'Oaxaca',
+      abv:43
+    });
+
+    const res = await request(app)
+      .get(`/api/v1/spirits/${updatedConejos.id}`);
+
+    expect(res.body).toEqual(updatedConejos);
+
   });
 });
