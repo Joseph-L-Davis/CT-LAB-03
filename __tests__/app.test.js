@@ -238,4 +238,20 @@ describe('spirit routes', () => {
     expect(res.body).toEqual(updatedConejos);
 
   });
+
+  it('DELETE spirit', async () => {
+    const conejos = await request(app)
+      .post('/api/v1/spirits')
+      .send({
+        name: '400 Conejos',
+        region: 'Mexico',
+        abv: 42
+      });
+
+    const res = await Spirit.deleteItem(conejos.body.id);
+    request(app)
+      .delete(`/api/v1/spirits/${conejos.id}`);
+    
+    expect(res.body).toEqual(conejos.id);
+  });
 });
