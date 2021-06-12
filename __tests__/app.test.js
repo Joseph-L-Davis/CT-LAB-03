@@ -291,5 +291,26 @@ describe('entree routes', () => {
 
     expect(res.body).toEqual(dinner);
   });
+  
+  it('GET all entrees', async () => {
+    const pizza = await Entree.insert({
+      name: 'Big Pie',
+      price: 15.00,
+      isGood: true
+    });
+
+    const chowder = await Entree.insert({
+      name: 'Clam Chowder',
+      price: 11.99,
+      isGood: false
+    });
+
+    const res = await request(app)
+      .get('/api/v1/entrees');
+
+    expect(res.body).toEqual([pizza, chowder]);
+  });
+
+
 
 });
