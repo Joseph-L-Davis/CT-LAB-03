@@ -163,7 +163,7 @@ describe.skip('headband routes', () => {
 
 });
 
-describe('spirit routes', () => {
+describe.skip('spirit routes', () => {
   beforeEach(() => {
     return setup(pool);
   });
@@ -254,4 +254,28 @@ describe('spirit routes', () => {
     
     expect(res.body).toEqual(conejos.id);
   });
+});
+
+describe('entree routes', () => {
+  beforeEach(() => {
+    return setup(pool);
+  });
+
+  it('POST to create an entree', async () => {
+    const res = await request(app)
+      .post('/api/v1/entrees')
+      .send({
+        name: 'Chicken Parm',
+        price: 16.99,
+        isGood: true
+      });
+
+    expect(res.body).toEqual({
+      id: '1',
+      name: 'Chicken Parm',
+      price: 16.99,
+      isGood: true
+    });
+  });
+
 });
