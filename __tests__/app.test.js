@@ -5,7 +5,6 @@ const request = require('supertest');
 const app = require('../lib/app');
 const Car = require('../lib/models/Car');
 const Headband = require('../lib/models/Headband');
-const { head } = require('../lib/app');
 
 describe.skip('car routes', () => {
   beforeEach(() => {
@@ -81,7 +80,7 @@ describe.skip('car routes', () => {
   });
 });
 
-describe('headband routes', () => {
+describe.skip('headband routes', () => {
   beforeEach(() => {
     return setup(pool);
   });
