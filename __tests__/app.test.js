@@ -5,6 +5,7 @@ const request = require('supertest');
 const app = require('../lib/app');
 const Car = require('../lib/models/Car');
 const Headband = require('../lib/models/Headband');
+const { head } = require('../lib/app');
 
 describe.skip('car routes', () => {
   beforeEach(() => {
@@ -143,6 +144,21 @@ describe('headband routes', () => {
       .get(`/api/v1/headbands/${updatedHeadband.id}`);
 
     expect(res.body).toEqual(updatedHeadband);
+  });
+
+  it('DELETE headband by ID', async () => {
+    const headband = await request(app)
+      .post('/api/v1/headbands')
+      .send({
+        color: 'cyan',
+        size: 'large'
+      });
+    
+    const res = await Headband.deleteItem(headband.body.id);
+    request(app)
+      .delete(`/api/v1/headbands/${headband.id}`);
+    expect(res.body).toEqual(headband.id);
+
   });
 
 });
