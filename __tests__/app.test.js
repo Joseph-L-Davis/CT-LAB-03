@@ -6,6 +6,7 @@ const app = require('../lib/app');
 const Car = require('../lib/models/Car');
 const Headband = require('../lib/models/Headband');
 const Spirit = require('../lib/models/Spirit');
+const Entree = require('../lib/models/Entree');
 
 describe.skip('car routes', () => {
   beforeEach(() => {
@@ -276,6 +277,19 @@ describe('entree routes', () => {
       price: 16.99,
       isGood: true
     });
+  });
+
+  it('GET entree by id', async () => {
+    const dinner = await Entree.insert({
+      name: 'Meatballs',
+      price: 9.99,
+      isGood: false
+    });
+
+    const res = await request(app)
+      .get(`/api/v1/entrees/${dinner.id}`);
+
+    expect(res.body).toEqual(dinner);
   });
 
 });
