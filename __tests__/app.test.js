@@ -197,4 +197,23 @@ describe('spirit routes', () => {
 
     expect(res.body).toEqual(conejos);
   });
+
+  it('GET all spirits', async () => {
+    const beefeater = await Spirit.insert({
+      name: 'Beefeater',
+      region: 'London',
+      abv: 43
+    });
+
+    const losJavis = await Spirit.insert({
+      name: 'Los Javis',
+      region: 'Oaxaca',
+      abv: 42
+    });
+
+    const res = await request(app)
+      .get('/api/v1/spirits');
+
+    expect(res.body).toEqual([beefeater, losJavis]);
+  });
 });
