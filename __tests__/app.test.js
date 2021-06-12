@@ -89,7 +89,7 @@ describe.skip('headband routes', () => {
     const res = await request(app)
       .post('/api/v1/headbands')
       .send({ color: 'red', size: 'large' });
-
+    console.log(res.body);
     expect(res.body).toEqual({
       id: '1',
       color: 'red',
@@ -160,4 +160,27 @@ describe.skip('headband routes', () => {
 
   });
 
+});
+
+describe('spirit routes', () => {
+  beforeEach(() => {
+    return setup(pool);
+  });
+
+  it('POST to create a spirit', async () => {
+    const res = await request(app)
+      .post('/api/v1/spirits')
+      .send({
+        name: 'Mezcal Vago',
+        region: 'Oaxaca',
+        abv: 47.7
+      });
+
+    expect(res.body).toEqual({
+      id: '1',
+      name: 'Mezcal Vago',
+      region: 'Oaxaca',
+      abv: '47.7'
+    });
+  });
 });
