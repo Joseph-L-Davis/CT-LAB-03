@@ -5,6 +5,7 @@ const request = require('supertest');
 const app = require('../lib/app');
 const Car = require('../lib/models/Car');
 const Headband = require('../lib/models/Headband');
+const Spirit = require('../lib/models/Spirit');
 
 describe.skip('car routes', () => {
   beforeEach(() => {
@@ -89,7 +90,7 @@ describe.skip('headband routes', () => {
     const res = await request(app)
       .post('/api/v1/headbands')
       .send({ color: 'red', size: 'large' });
-
+    console.log(res.body);
     expect(res.body).toEqual({
       id: '1',
       color: 'red',
@@ -126,7 +127,7 @@ describe.skip('headband routes', () => {
     expect(res.body).toEqual([yellow, pink]);
   });
 
-  it('UPDATE headband', async () => {
+  it('PUT headband', async () => {
     const headband = await request(app)
       .post('/api/v1/headbands')
       .send({
@@ -160,4 +161,97 @@ describe.skip('headband routes', () => {
 
   });
 
+});
+
+describe('spirit routes', () => {
+  beforeEach(() => {
+    return setup(pool);
+  });
+
+  it('POST to create a spirit', async () => {
+    const res = await request(app)
+      .post('/api/v1/spirits')
+      .send({
+        name: 'Mezcal Vago',
+        region: 'Oaxaca',
+        abv: 47.7
+      });
+
+    expect(res.body).toEqual({
+      id: '1',
+      name: 'Mezcal Vago',
+      region: 'Oaxaca',
+      abv: '47.7'
+    });
+  });
+
+  it('GET spirit  by ID', async () => {
+    const conejos = await Spirit.insert({
+      name: '400 Conejos',
+      region: 'Mexico',
+      abv: 40
+    });
+
+    const res = await request(app)
+      .get(`/api/v1/spirits/${conejos.id}`);
+
+    expect(res.body).toEqual(conejos);
+  });
+
+  it('GET all spirits', async () => {
+    const beefeater = await Spirit.insert({
+      name: 'Beefeater',
+      region: 'London',
+      abv: 43
+    });
+
+    const losJavis = await Spirit.insert({
+      name: 'Los Javis',
+      region: 'Oaxaca',
+      abv: 42
+    });
+
+    const res = await request(app)
+      .get('/api/v1/spirits');
+
+    expect(res.body).toEqual([beefeater, losJavis]);
+  });
+
+  it('PUT spirit', async () => {
+    const conejos = await request(app)
+      .post('/api/v1/spirits')
+      .send({
+        name: '400 Conejos',
+        region: 'Mexico',
+        abv: 42
+      });
+
+    const updatedConejos = await Spirit.updateItem(conejos.body.id, {
+      name: '400 Conejos',
+      region: 'Oaxaca',
+      abv:43
+    });
+
+    const res = await request(app)
+      .get(`/api/v1/spirits/${updatedConejos.id}`);
+
+    expect(res.body).toEqual(updatedConejos);
+
+  });
+
+  it('DELETE spirit', async () => {
+    const conejos = await request(app)
+      .post('/api/v1/spirits')
+      .send({
+        name: '400 Conejos',
+        region: 'Mexico',
+        abv: 42
+      });
+
+    const res = await Spirit.deleteItem(conejos.body.id);
+    request(app)
+      .delete(`/api/v1/spirits/${conejos.id}`);
+    
+    expect(res.body).toEqual(conejos.id);
+  });
 });
