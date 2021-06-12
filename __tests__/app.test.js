@@ -5,6 +5,7 @@ const request = require('supertest');
 const app = require('../lib/app');
 const Car = require('../lib/models/Car');
 const Headband = require('../lib/models/Headband');
+const Spirit = require('../lib/models/Spirit');
 
 describe.skip('car routes', () => {
   beforeEach(() => {
@@ -182,5 +183,18 @@ describe('spirit routes', () => {
       region: 'Oaxaca',
       abv: '47.7'
     });
+  });
+
+  it('GET spirit  by ID', async () => {
+    const conejos = await Spirit.insert({
+      name: '400 Conejos',
+      region: 'Mexico',
+      abv: 40
+    });
+
+    const res = await request(app)
+      .get(`/api/v1/spirits/${conejos.id}`);
+
+    expect(res.body).toEqual(conejos);
   });
 });
