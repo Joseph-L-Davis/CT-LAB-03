@@ -332,5 +332,21 @@ describe('entree routes', () => {
     expect(res.body).toEqual(updatedTots);
   });
 
+  it('DELETE entree by ID', async () => {
+    const tots = await request(app)
+      .post('/api/v1/entrees')
+      .send({
+        name: 'Delicious Tots',
+        price: 8.95,
+        isGood: true
+      });
+
+    const res = await Entree.deleteItem(tots.body.id);
+    request(app)
+      .delete(`/api/v1/entrees/${tots.id}`);
+
+    expect(res.body).toEqual(tots.id);
+  });
+
 
 });
