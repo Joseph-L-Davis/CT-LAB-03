@@ -311,6 +311,26 @@ describe('entree routes', () => {
     expect(res.body).toEqual([pizza, chowder]);
   });
 
+  it('PUT entree', async () => {
+    const tots = await request(app)
+      .post('/api/v1/entrees')
+      .send({
+        name: 'Delicious Tots',
+        price: 8.95,
+        isGood: true
+      });
+
+    const updatedTots = await Entree.updateItem(tots.body.id, {
+      name: 'Delicious Tots',
+      price: 14.99,
+      isGood: false
+    });
+
+    const res = await request(app)
+      .get(`/api/v1/entrees/${updatedTots.id}`);
+    
+    expect(res.body).toEqual(updatedTots);
+  });
 
 
 });
