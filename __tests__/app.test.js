@@ -7,6 +7,7 @@ const Car = require('../lib/models/Car');
 const Headband = require('../lib/models/Headband');
 const Spirit = require('../lib/models/Spirit');
 const Entree = require('../lib/models/Entree');
+const Fruit = require('../lib/models/Fruit');
 
 describe.skip('car routes', () => {
   beforeEach(() => {
@@ -369,5 +370,16 @@ describe('test fruit routes', () => {
       name: 'banana',
       color: 'yellow'
     });
+  });
+
+  it('GET fruit by ID', async () => {
+    const banana = await Fruit.insert({
+      name: 'banana',
+      color: 'yellow'
+    });
+
+    const res = await request(app)
+      .get(`/api/v1/fruits/${banana.id}`);
+
   });
 });
