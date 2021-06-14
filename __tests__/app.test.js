@@ -399,4 +399,38 @@ describe('test fruit routes', () => {
 
     expect(res.body).toEqual([apple, strawberry]);
   });
+
+  it('PUT fruit', async () => {
+    const grape = await request(app)
+      .post('/api/v1/fruits')
+      .send({
+        name: 'grape',
+        color: 'green'
+      });
+
+    const updatedGrape = await Fruit.updateItem(grape.body.id, {
+      name: 'grape',
+      color: 'purple'
+    });
+
+    const res = await request(app)
+      .get(`/api/v1/fruits/${updatedGrape.id}`);
+    
+    expect(res.body).toEqual(updatedGrape);
+  });
+
+  it('DELETE fruit by ID', async () => {
+    const peach = await request(app)
+      .post('/api/v1/fruits')
+      .send({
+        name: 'peach',
+        color: 'rosey peach color'
+      });
+
+    const res = await Fruit.deleteItem(peach.body.id);
+    request(app)
+      .delete(`/api/v1/fruits/${peach.id}`);
+
+    expect(res.body).toEqual(peach.id);
+  });
 });
