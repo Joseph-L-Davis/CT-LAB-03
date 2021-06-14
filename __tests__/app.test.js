@@ -6,8 +6,10 @@ const app = require('../lib/app');
 const Car = require('../lib/models/Car');
 const Headband = require('../lib/models/Headband');
 const Spirit = require('../lib/models/Spirit');
+const Entree = require('../lib/models/Entree');
+const Fruit = require('../lib/models/Fruit');
 
-describe.skip('car routes', () => {
+describe('car routes', () => {
   beforeEach(() => {
     return setup(pool);
   });
@@ -81,7 +83,7 @@ describe.skip('car routes', () => {
   });
 });
 
-describe.skip('headband routes', () => {
+describe('headband routes', () => {
   beforeEach(() => {
     return setup(pool);
   });
@@ -253,5 +255,182 @@ describe('spirit routes', () => {
       .delete(`/api/v1/spirits/${conejos.id}`);
     
     expect(res.body).toEqual(conejos.id);
+  });
+});
+
+describe('entree routes', () => {
+  beforeEach(() => {
+    return setup(pool);
+  });
+
+  it('POST to create an entree', async () => {
+    const res = await request(app)
+      .post('/api/v1/entrees')
+      .send({
+        name: 'Chicken Parm',
+        price: 16.99,
+        isGood: true
+      });
+
+    expect(res.body).toEqual({
+      id: '1',
+      name: 'Chicken Parm',
+      price: 16.99,
+      isGood: true
+    });
+  });
+
+  it('GET entree by id', async () => {
+    const dinner = await Entree.insert({
+      name: 'Meatballs',
+      price: 9.99,
+      isGood: false
+    });
+
+    const res = await request(app)
+      .get(`/api/v1/entrees/${dinner.id}`);
+
+    expect(res.body).toEqual(dinner);
+  });
+  
+  it('GET all entrees', async () => {
+    const pizza = await Entree.insert({
+      name: 'Big Pie',
+      price: 15.00,
+      isGood: true
+    });
+
+    const chowder = await Entree.insert({
+      name: 'Clam Chowder',
+      price: 11.99,
+      isGood: false
+    });
+
+    const res = await request(app)
+      .get('/api/v1/entrees');
+
+    expect(res.body).toEqual([pizza, chowder]);
+  });
+
+  it('PUT entree', async () => {
+    const tots = await request(app)
+      .post('/api/v1/entrees')
+      .send({
+        name: 'Delicious Tots',
+        price: 8.95,
+        isGood: true
+      });
+
+    const updatedTots = await Entree.updateItem(tots.body.id, {
+      name: 'Delicious Tots',
+      price: 14.99,
+      isGood: false
+    });
+
+    const res = await request(app)
+      .get(`/api/v1/entrees/${updatedTots.id}`);
+    
+    expect(res.body).toEqual(updatedTots);
+  });
+
+  it('DELETE entree by ID', async () => {
+    const tots = await request(app)
+      .post('/api/v1/entrees')
+      .send({
+        name: 'Delicious Tots',
+        price: 8.95,
+        isGood: true
+      });
+
+    const res = await Entree.deleteItem(tots.body.id);
+    request(app)
+      .delete(`/api/v1/entrees/${tots.id}`);
+
+    expect(res.body).toEqual(tots.id);
+  });
+
+
+});
+
+describe('test fruit routes', () => {
+  beforeEach(() => {
+    return setup(pool);
+  });
+
+  it('POST fruit', async () => {
+    const res = await request(app)
+      .post('/api/v1/fruits')
+      .send({
+        name: 'banana',
+        color: 'yellow'
+      });
+    
+    expect(res.body).toEqual({
+      id: '1',
+      name: 'banana',
+      color: 'yellow'
+    });
+  });
+
+  it('GET fruit by ID', async () => {
+    const banana = await Fruit.insert({
+      name: 'banana',
+      color: 'yellow'
+    });
+
+    const res = await request(app)
+      .get(`/api/v1/fruits/${banana.id}`);
+    expect(res.body).toEqual(banana);
+  });
+
+  it('GET all fruits', async () => {
+    const apple = await Fruit.insert({
+      name: 'apple',
+      color: 'green'
+    });
+
+    const strawberry = await Fruit.insert({
+      name: 'strawberry',
+      color: 'red'
+    });
+
+    const res = await request(app)
+      .get('/api/v1/fruits');
+
+    expect(res.body).toEqual([apple, strawberry]);
+  });
+
+  it('PUT fruit', async () => {
+    const grape = await request(app)
+      .post('/api/v1/fruits')
+      .send({
+        name: 'grape',
+        color: 'green'
+      });
+
+    const updatedGrape = await Fruit.updateItem(grape.body.id, {
+      name: 'grape',
+      color: 'purple'
+    });
+
+    const res = await request(app)
+      .get(`/api/v1/fruits/${updatedGrape.id}`);
+    
+    expect(res.body).toEqual(updatedGrape);
+  });
+
+  it('DELETE fruit by ID', async () => {
+    const peach = await request(app)
+      .post('/api/v1/fruits')
+      .send({
+        name: 'peach',
+        color: 'rosey peach color'
+      });
+
+    const res = await Fruit.deleteItem(peach.body.id);
+    request(app)
+      .delete(`/api/v1/fruits/${peach.id}`);
+
+    expect(res.body).toEqual(peach.id);
   });
 });
