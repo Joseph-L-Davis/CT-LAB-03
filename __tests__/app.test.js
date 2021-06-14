@@ -380,6 +380,6 @@ describe('test fruit routes', () => {
 
     const res = await request(app)
       .get(`/api/v1/fruits/${banana.id}`);
-
+    expect(res.body).toEqual(banana);
   });
 });
