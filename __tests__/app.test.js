@@ -257,7 +257,7 @@ describe.skip('spirit routes', () => {
   });
 });
 
-describe('entree routes', () => {
+describe.skip('entree routes', () => {
   beforeEach(() => {
     return setup(pool);
   });
@@ -349,4 +349,25 @@ describe('entree routes', () => {
   });
 
 
+});
+
+describe('test fruit routes', () => {
+  beforeEach(() => {
+    return setup(pool);
+  });
+
+  it('POST fruit', async () => {
+    const res = await request(app)
+      .post('/api/v1/fruits')
+      .send({
+        name: 'banana',
+        color: 'yellow'
+      });
+    
+    expect(res.body).toEqual({
+      id: '1',
+      name: 'banana',
+      color: 'yellow'
+    });
+  });
 });
