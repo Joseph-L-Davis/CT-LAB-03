@@ -382,4 +382,21 @@ describe('test fruit routes', () => {
       .get(`/api/v1/fruits/${banana.id}`);
     expect(res.body).toEqual(banana);
   });
+
+  it('GET all fruits', async () => {
+    const apple = await Fruit.insert({
+      name: 'apple',
+      color: 'green'
+    });
+
+    const strawberry = await Fruit.insert({
+      name: 'strawberry',
+      color: 'red'
+    });
+
+    const res = await request(app)
+      .get('/api/v1/fruits');
+
+    expect(res.body).toEqual([apple, strawberry]);
+  });
 });
