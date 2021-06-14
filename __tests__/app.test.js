@@ -9,7 +9,7 @@ const Spirit = require('../lib/models/Spirit');
 const Entree = require('../lib/models/Entree');
 const Fruit = require('../lib/models/Fruit');
 
-describe.skip('car routes', () => {
+describe('car routes', () => {
   beforeEach(() => {
     return setup(pool);
   });
@@ -83,7 +83,7 @@ describe.skip('car routes', () => {
   });
 });
 
-describe.skip('headband routes', () => {
+describe('headband routes', () => {
   beforeEach(() => {
     return setup(pool);
   });
@@ -165,7 +165,7 @@ describe.skip('headband routes', () => {
 
 });
 
-describe.skip('spirit routes', () => {
+describe('spirit routes', () => {
   beforeEach(() => {
     return setup(pool);
   });
@@ -258,7 +258,7 @@ describe.skip('spirit routes', () => {
   });
 });
 
-describe.skip('entree routes', () => {
+describe('entree routes', () => {
   beforeEach(() => {
     return setup(pool);
   });
